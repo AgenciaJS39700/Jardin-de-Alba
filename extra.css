@@ -4,9 +4,9 @@
 .pc:hover .im.ph img{transform:scale(1.07)}
 
 /* Banda de foto */
-.xb{position:relative;min-height:min(86svh,680px);display:grid;align-items:end;overflow:hidden;color:#fff;isolation:isolate}
+.xb{position:relative;min-height:min(62svh,540px);display:grid;align-items:end;overflow:hidden;color:#fff;isolation:isolate}
 .xb-im{position:absolute;inset:0;z-index:-2}
-.xb-im img{position:absolute;left:0;top:-10%;width:100%;height:120%;object-fit:cover;will-change:transform}
+.xb-im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .xb::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(20,30,22,0) 25%,rgba(20,34,25,.84) 90%)}
 .xb-t{padding:clamp(3rem,8vw,6rem) 0}
 .xb-t .kicker{color:#f3b8ca}
@@ -66,7 +66,7 @@
 .qz-r .why{color:var(--mute)}
 .qz-r .pr2{font-family:var(--display);font-size:1.8rem;font-weight:var(--dw)}
 .qz-a{display:flex;flex-wrap:wrap;gap:.6rem}
-@media(prefers-reduced-motion:reduce){.bq-st .nw{animation:none}.xb-im img{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.bq-st .nw{animation:none}}
 /* Optimización móvil (oct 2026): igual que la panadería */
 html,body{overflow-x:clip}
 section[id],.sec{scroll-margin-top:84px}
@@ -110,3 +110,12 @@ html:has(.dr.on) .toast{display:none}
  .bq-st{width:min(100%,30svh)}
  .bq-card{font-size:.75rem;padding:.45rem .55rem;min-height:0;width:min(40%,150px)}
 }
+
+/* Portada con fotos reales (igual que la panadería) */
+.hero-a .ph-main{position:absolute;inset:7%;margin:0;border-radius:46% 54% 50% 50%/42% 44% 56% 58%;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.55);animation:morph 14s ease-in-out infinite;z-index:1}
+.hero-a .ph-main img{width:100%;height:100%;object-fit:cover;transform:scale(1.04)}
+.hero-a .ph-it{position:absolute;z-index:2;animation:flt 7s ease-in-out infinite}
+.hero-a .ph-it img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:50%;border:5px solid var(--card);box-shadow:0 20px 40px -14px rgba(0,0,0,.5)}
+.hero-a .chip-f{z-index:3}
+.hero-a{overflow:visible}
+@media(max-width:600px){.hero-a .ph-it{width:26%!important}}

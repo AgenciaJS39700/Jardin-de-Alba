@@ -8,20 +8,6 @@
   var eur = function (n) { return n.toLocaleString("es-ES", { style: "currency", currency: "EUR", minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
   var wa = function (t) { return "https://wa.me/" + (S.wa || "") + "?text=" + encodeURIComponent(t); };
 
-  /* ---------- Parallax de la banda ---------- */
-  var band = $(".xb"), bimg = band && $(".xb-im img", band);
-  if (bimg && !reduce) {
-    var tick = false;
-    var move = function () {
-      tick = false;
-      var r = band.getBoundingClientRect(), vh = window.innerHeight;
-      if (r.bottom < 0 || r.top > vh) return;
-      bimg.style.transform = "translate3d(0," + (((r.top + r.height / 2 - vh / 2) / (vh + r.height)) * -16).toFixed(2) + "%,0)";
-    };
-    window.addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(move); } }, { passive: true });
-    move();
-  }
-
   /* ---------- Creador de ramos con fotos reales (cada flor es una foto sin fondo) ---------- */
   // w: ancho de la flor respecto al escenario · head: va en la cúpula del ramo · back: va detrás (verdes y espigas)
   var FL = [
