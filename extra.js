@@ -22,97 +22,98 @@
     move();
   }
 
-  /* ---------- Dibujo de cada flor (SVG) ---------- */
-  function petals(n, r, len, w, col, rot) {
-    var o = "";
-    for (var i = 0; i < n; i++) o += '<ellipse cx="0" cy="' + (-r - len / 2) + '" rx="' + w + '" ry="' + len / 2 + '" fill="' + col + '" transform="rotate(' + (i * 360 / n + (rot || 0)) + ')"/>';
-    return o;
-  }
-  var DRAW = {
-    rosa: function () { return '<circle r="20" fill="#b8102c"/><circle r="15" fill="#d61f3c"/><path d="M-10 0a10 10 0 0 1 20 0a7 7 0 0 1-14 0a4 4 0 0 1 8 0" fill="none" stroke="#8e0a20" stroke-width="2.2" stroke-linecap="round"/>'; },
-    blanca: function () { return '<circle r="20" fill="#e9e1d3"/><circle r="15" fill="#fbf7ef"/><path d="M-10 0a10 10 0 0 1 20 0a7 7 0 0 1-14 0a4 4 0 0 1 8 0" fill="none" stroke="#d4c7b2" stroke-width="2.2" stroke-linecap="round"/>'; },
-    tulipan: function () { return '<path d="M-14 -4c0-14 6-20 14-22c8 2 14 8 14 22c0 12-6 18-14 18s-14-6-14-18z" fill="#f07aa6"/><path d="M-6 -20c4 6 4 18 0 30M6 -20c-4 6-4 18 0 30" fill="none" stroke="#d6507f" stroke-width="2"/>'; },
-    girasol: function () { return petals(14, 9, 16, 5, "#f6b40e") + '<circle r="11" fill="#6b3d12"/><circle r="6" fill="#4a2909"/>'; },
-    margarita: function () { return petals(12, 5, 12, 3.6, "#ffffff") + '<circle r="6" fill="#f2c21b"/>'; },
-    peonia: function () { return '<circle r="26" fill="#f5a6b8"/><circle cx="-8" cy="-6" r="13" fill="#f8bccb"/><circle cx="9" cy="-4" r="12" fill="#f39bb0"/><circle cx="0" cy="8" r="13" fill="#f7b3c3"/><circle r="7" fill="#ee8aa2"/>'; },
-    lavanda: function () { var o = '<path d="M0 26V-30" stroke="#5f8a47" stroke-width="2.4"/>'; for (var i = 0; i < 7; i++) o += '<ellipse cx="' + (i % 2 ? 4 : -4) + '" cy="' + (-26 + i * 7) + '" rx="4.6" ry="6" fill="' + (i % 2 ? "#8a63c4" : "#a07ed6") + '"/>'; return o; },
-    eucalipto: function () { return '<path d="M0 30V-30" stroke="#6f8f7a" stroke-width="2"/>' + [-22, -10, 2, 14].map(function (y, i) { return '<ellipse cx="' + (i % 2 ? 8 : -8) + '" cy="' + y + '" rx="8" ry="6.5" fill="' + (i % 2 ? "#9bb5a5" : "#86a493") + '"/>'; }).join(""); }
-  };
+  /* ---------- Creador de ramos con fotos reales (cada flor es una foto sin fondo) ---------- */
+  // w: ancho de la flor respecto al escenario · head: va en la cúpula del ramo · back: va detrás (verdes y espigas)
   var FL = [
-    { id: "rosa", n: "Rosa roja", p: 3.5, max: 24, r: 20 },
-    { id: "blanca", n: "Rosa blanca", p: 3.5, max: 24, r: 20 },
-    { id: "peonia", n: "Peonía", p: 6, max: 10, r: 26 },
-    { id: "tulipan", n: "Tulipán", p: 2.5, max: 20, r: 18 },
-    { id: "girasol", n: "Girasol", p: 3, max: 12, r: 25 },
-    { id: "margarita", n: "Margarita", p: 1.5, max: 20, r: 16 },
-    { id: "lavanda", n: "Lavanda", p: 1, max: 15, r: 14 },
-    { id: "eucalipto", n: "Eucalipto (verde)", p: 1.2, max: 12, r: 18 }
+    { id: "rosa", n: "Rosa roja", p: 3.5, max: 24, w: 21, head: true },
+    { id: "blanca", n: "Rosa blanca", p: 3.5, max: 24, w: 21, head: true },
+    { id: "peonia", n: "Peonía", p: 6, max: 10, w: 26, head: true },
+    { id: "girasol", n: "Girasol", p: 3, max: 12, w: 25, head: true },
+    { id: "margarita", n: "Margarita", p: 1.5, max: 20, w: 15, head: true },
+    { id: "tulipan", n: "Tulipán", p: 2.5, max: 20, w: 15, back: true },
+    { id: "lavanda", n: "Lavanda", p: 1, max: 15, w: 24, back: true },
+    { id: "eucalipto", n: "Eucalipto (verde)", p: 1.2, max: 12, w: 30, back: true }
   ];
   var WR = [
-    { id: "kraft", n: "Kraft", c: "#c9a47a", d: "#a9845c" },
-    { id: "rosa", n: "Rosa empolvado", c: "#f1c6d3", d: "#d9a0b2" },
-    { id: "crema", n: "Crema", c: "#f3ead8", d: "#d8ccb3" },
-    { id: "salvia", n: "Verde salvia", c: "#a9bfa8", d: "#869e85" },
-    { id: "negro", n: "Negro mate", c: "#2b2b2e", d: "#111113" }
+    { id: "kraft", n: "Kraft", c: "#c69a6a" },
+    { id: "rosa", n: "Rosa empolvado", c: "#efb6c6" },
+    { id: "crema", n: "Crema", c: "" },
+    { id: "salvia", n: "Verde salvia", c: "#9db79c" },
+    { id: "negro", n: "Negro mate", c: "#3b3a3f" }
   ];
   var WRAP_PRICE = 4;
+  var src = function (id) { return "img/ramo/" + id + ".webp"; };
+  // Posiciones fijas: espiral de ángulo áureo dentro de la cúpula (en % del escenario)
+  var DOME = [];
+  for (var i = 0; i < 60; i++) { var a = i * 2.39996, rr = Math.sqrt((i + .5) / 60); DOME.push([50 + Math.cos(a) * rr * 27, 47 + Math.sin(a) * rr * 12 - (1 - rr) * 5]); }
+  // Abanico para lo que va detrás (ángulo en grados)
+  var fan = function (k, n, spread) { return n < 2 ? 0 : -spread / 2 + k * spread / (n - 1); };
 
   var bq = $("#bq");
   if (bq) {
-    var q = { rosa: 5, blanca: 0, peonia: 0, tulipan: 0, girasol: 0, margarita: 3, lavanda: 0, eucalipto: 3 }, wrap = "kraft", lastAdd = "";
-    var mini = function (id) { return '<svg viewBox="-34 -34 68 68" aria-hidden="true">' + DRAW[id]() + "</svg>"; };
-    bq.innerHTML = '<div class="bq-v"><svg id="bqs" viewBox="0 0 320 360" role="img" aria-label="Vista previa de tu ramo"></svg><div class="bq-card" id="bqcard" aria-hidden="true"></div></div>' +
+    var q = { rosa: 5, blanca: 0, peonia: 1, girasol: 0, margarita: 3, tulipan: 0, lavanda: 2, eucalipto: 4 }, wrap = "kraft", lastAdd = "";
+    bq.innerHTML = '<div class="bq-v"><div class="bq-st" id="bqs" role="img" aria-label="Vista previa de tu ramo"></div><div class="bq-card" id="bqcard" aria-hidden="true"></div></div>' +
       '<div class="bq-c"><div><h4>1 · Elige las flores</h4><div class="flw">' + FL.map(function (f) {
-        return '<div class="fr"><span class="sw2">' + mini(f.id) + "</span><span><b>" + esc(f.n) + "</b><small>" + eur(f.p) + ' / tallo</small></span><span class="qt"><button type="button" data-m="' + f.id + '" aria-label="Quitar ' + esc(f.n) + '">−</button><span id="q-' + f.id + '" aria-live="polite">0</span><button type="button" data-p="' + f.id + '" aria-label="Añadir ' + esc(f.n) + '">+</button></span></div>';
-      }).join("") + '</div></div><div><h4>2 · Papel y lazo</h4><div class="wraps" role="group" aria-label="Papel">' + WR.map(function (w) { return '<button type="button" class="wp" data-w="' + w.id + '" aria-pressed="false"><i style="background:' + w.c + '"></i>' + esc(w.n) + "</button>"; }).join("") + '</div></div><div><h4>3 · Dedicatoria (opcional)</h4><textarea id="bqmsg" maxlength="140" placeholder="Feliz cumpleaños, mamá. Te quiero mucho."></textarea></div>' +
+        return '<div class="fr"><span class="sw2"><img src="' + src(f.id) + '" alt="" loading="lazy" decoding="async"></span><span><b>' + esc(f.n) + "</b><small>" + eur(f.p) + ' / tallo</small></span><span class="qt"><button type="button" data-m="' + f.id + '" aria-label="Quitar ' + esc(f.n) + '">−</button><span id="q-' + f.id + '" aria-live="polite">0</span><button type="button" data-p="' + f.id + '" aria-label="Añadir ' + esc(f.n) + '">+</button></span></div>';
+      }).join("") + '</div></div><div><h4>2 · Papel y lazo</h4><div class="wraps" role="group" aria-label="Papel">' + WR.map(function (w) { return '<button type="button" class="wp" data-w="' + w.id + '" aria-pressed="false"><i style="background:' + (w.c || "#f4eee2") + '"></i>' + esc(w.n) + "</button>"; }).join("") + '</div></div><div><h4>3 · Dedicatoria (opcional)</h4><textarea id="bqmsg" maxlength="140" placeholder="Feliz cumpleaños, mamá. Te quiero mucho."></textarea></div>' +
       '<div class="bq-sum"><span><small id="bqn"></small><b id="bqt"></b></span><a class="btn btn-wa" id="bqgo" target="_blank" rel="noopener" href="#">' + (S.icons && S.icons.wa || "") + "Pedir este ramo</a></div></div>";
 
-    // Posiciones fijas en espiral (ángulo áureo) dentro de la cúpula del ramo
-    var POS = [];
-    for (var i = 0; i < 70; i++) { var a = i * 2.39996, rr = Math.sqrt(i / 70); POS.push([160 + Math.cos(a) * rr * 104, 134 + Math.sin(a) * rr * 60 - (1 - rr) * 16]); }
+    var paper = function (cls, w) {
+      return '<span class="pp ' + cls + '"><img src="' + src("papel") + '" alt="">' + (w.c ? '<i style="background:' + w.c + '"></i>' : "") + "</span>";
+    };
     var draw = function () {
-      var list = [];
-      FL.forEach(function (f) { if (f.id !== "eucalipto") for (var k = 0; k < q[f.id]; k++) list.push(f.id); });
-      // mezcla estable para que no queden en bloques
-      var mixed = [], buckets = {}; list.forEach(function (id) { (buckets[id] = buckets[id] || []).push(id); });
+      var w = WR.filter(function (x) { return x.id === wrap; })[0], html = "";
+      // 1) detrás: eucalipto, lavanda y tulipanes en abanico
+      var backs = [];
+      ["eucalipto", "lavanda", "tulipan"].forEach(function (id) { for (var k = 0; k < q[id]; k++) backs.push(id); });
+      backs.forEach(function (id, k) {
+        var f = FL.filter(function (x) { return x.id === id; })[0], n = q[id], idx = backs.slice(0, k).filter(function (x) { return x === id; }).length;
+        var ang = fan(idx, n, id === "eucalipto" ? 110 : id === "lavanda" ? 64 : 50) + (idx % 2 ? 4 : -4);
+        var bot = id === "eucalipto" ? 40 : id === "lavanda" ? 43 : 42;
+        html += '<img class="fl2 bk' + (id === lastAdd && idx === n - 1 ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + f.w + "%;left:" + (50 - f.w / 2) + "%;bottom:" + bot + "%;transform:rotate(" + ang.toFixed(1) + 'deg);z-index:' + (id === "eucalipto" ? 1 : 2) + '">';
+      });
+      // 2) papel por detrás
+      html += paper("pb", w);
+      // 3) cabezas en la cúpula, mezcladas para que no queden en bloques
+      var heads = [], buckets = {};
+      FL.forEach(function (f) { if (f.head) for (var k = 0; k < q[f.id]; k++) (buckets[f.id] = buckets[f.id] || []).push(f.id); });
       var keys = Object.keys(buckets), more = true;
-      while (more) { more = false; keys.forEach(function (k) { if (buckets[k].length) { mixed.push(buckets[k].shift()); more = true; } }); }
-      var w = WR.filter(function (x) { return x.id === wrap; })[0];
-      var greens = "";
-      for (var g = 0; g < q.eucalipto; g++) { var ang = -70 + (g / Math.max(1, q.eucalipto - 1)) * 140; greens += '<g transform="translate(160 170) rotate(' + ang.toFixed(1) + ') translate(0 -96) scale(1.7)">' + DRAW.eucalipto() + "</g>"; }
-      var stems = '<path d="M140 190L150 330M160 190V334M180 190L170 330" stroke="#5f8a47" stroke-width="5" stroke-linecap="round"/>';
-      var flowers = mixed.map(function (id, i) {
-        var p = POS[i % POS.length], f = FL.filter(function (x) { return x.id === id; })[0], s = 1.5 - Math.min(.55, mixed.length / 50);
-        return '<g transform="translate(' + p[0].toFixed(1) + " " + p[1].toFixed(1) + ") scale(" + s.toFixed(2) + ')"><g class="' + (id === lastAdd && i === mixed.lastIndexOf(id) ? "fl2" : "") + '">' + DRAW[id]() + "</g></g>";
-      }).reverse().join("");
-      var paper = '<path d="M56 160L160 342L264 160L232 182L160 196L88 182Z" fill="' + w.c + '"/><path d="M56 160L112 230M264 160L208 230M160 196V342" stroke="' + w.d + '" stroke-width="2" opacity=".6" fill="none"/>' +
-        '<path d="M28 150L76 148L160 320L244 148L292 150L250 196L160 352L70 196Z" fill="' + w.c + '" opacity=".55"/>' +
-        '<path d="M130 262c-26-20-40-6-30 6s26 4 30-6zm60 0c26-20 40-6 30 6s-26 4-30-6z" fill="' + (wrap === "negro" ? "#d9b26a" : "#e08aa5") + '"/><circle cx="160" cy="262" r="9" fill="' + (wrap === "negro" ? "#c99a45" : "#c25b82") + '"/>';
-      $("#bqs").innerHTML = '<ellipse cx="160" cy="350" rx="80" ry="8" fill="#000" opacity=".1"/><g class="sw">' + stems + greens + (mixed.length ? flowers : '<text x="160" y="130" text-anchor="middle" fill="currentColor" opacity=".5" font-size="15">Añade flores ✿</text>') + paper + "</g>";
+      while (more) { more = false; keys.forEach(function (k) { if (buckets[k].length) { heads.push(buckets[k].shift()); more = true; } }); }
+      var sc = 1.5 - Math.min(.55, heads.length / 40);
+      heads.forEach(function (id, k) {
+        var f = FL.filter(function (x) { return x.id === id; })[0], p = DOME[k % DOME.length], ww = f.w * sc;
+        html += '<img class="fl2 hd' + (id === lastAdd && k === heads.lastIndexOf(id) ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + ww.toFixed(1) + "%;left:" + (p[0] - ww / 2).toFixed(1) + "%;top:" + (p[1] - ww * .55).toFixed(1) + "%;z-index:" + (10 + Math.round(p[1])) + ";transform:rotate(" + ((k * 47) % 30 - 15) + 'deg)">';
+      });
+      // 4) papel por delante (solo la parte de abajo) para que las flores queden dentro
+      html += paper("pf", w);
+      if (!heads.length && !backs.length) html += '<span class="bq-empty">Añade flores ✿</span>';
+      $("#bqs").innerHTML = html;
+
       var tallos = 0, tot = WRAP_PRICE;
       FL.forEach(function (f) { $("#q-" + f.id).textContent = q[f.id]; tallos += q[f.id]; tot += q[f.id] * f.p; });
+      tot = Math.round(tot * 100) / 100;
       [].forEach.call(bq.querySelectorAll(".wp"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.w === wrap)); });
       $("#bqn").textContent = tallos + " tallos · papel " + w.n.toLowerCase() + " incluido";
-      $("#bqt").textContent = eur(Math.round(tot * 100) / 100);
+      $("#bqt").textContent = eur(tot);
       var msg = $("#bqmsg").value.trim();
       $("#bqcard").textContent = msg;
       var desc = FL.filter(function (f) { return q[f.id]; }).map(function (f) { return q[f.id] + "× " + f.n; }).join(", ");
-      $("#bqgo").href = wa("Hola, quiero este ramo personalizado:\n" + (desc || "(sin flores)") + "\nPapel: " + w.n + (msg ? "\nDedicatoria: " + msg : "") + "\nTotal orientativo: " + eur(Math.round(tot * 100) / 100) + "\n¿Para cuándo lo tendríais?");
-      $("#bqgo").setAttribute("aria-disabled", String(!mixed.length));
+      $("#bqgo").href = wa("Hola, quiero este ramo personalizado:\n" + (desc || "(sin flores)") + "\nPapel: " + w.n + (msg ? "\nDedicatoria: " + msg : "") + "\nTotal orientativo: " + eur(tot) + "\n¿Para cuándo lo tendríais?");
+      $("#bqgo").setAttribute("aria-disabled", String(!tallos));
     };
     bq.addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
       var f;
-      if (b.dataset.p) { f = FL.filter(function (x) { return x.id === b.dataset.p; })[0]; if (q[f.id] < f.max) { q[f.id]++; lastAdd = f.id; } }
+      if (b.dataset.p) { f = FL.filter(function (x) { return x.id === b.dataset.p; })[0]; if (q[f.id] < f.max) { q[f.id]++; lastAdd = f.id; } else toast2("Máximo " + f.max + " tallos de " + f.n.toLowerCase()); }
       else if (b.dataset.m) { if (q[b.dataset.m] > 0) q[b.dataset.m]--; lastAdd = ""; }
       else if (b.dataset.w) { wrap = b.dataset.w; lastAdd = ""; }
       draw();
     });
+    var toast2 = function (m) { var t = document.querySelector(".toast"); if (t) { t.textContent = m; t.classList.add("on"); setTimeout(function () { t.classList.remove("on"); }, 1800); } };
     $("#bqgo").addEventListener("click", function (e) { if (this.getAttribute("aria-disabled") === "true") e.preventDefault(); });
     $("#bqmsg").addEventListener("input", function () { $("#bqcard").textContent = this.value.trim(); });
     $("#bqmsg").addEventListener("change", draw);
     draw();
-    window.__ramo = function (preset) { for (var k in q) q[k] = preset[k] || 0; lastAdd = ""; draw(); };
   }
 
   /* ---------- Buscador de ramo (3 preguntas) ---------- */

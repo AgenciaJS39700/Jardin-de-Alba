@@ -19,11 +19,19 @@
 @media(min-width:960px){.bq{grid-template-columns:1fr 1fr;align-items:start}}
 .bq-v{position:relative;background:radial-gradient(circle at 50% 38%,var(--tint),transparent 68%),var(--card);border:1px solid var(--line);border-radius:calc(var(--r) + 6px);padding:1rem;display:grid;place-items:center;overflow:hidden}
 @media(min-width:960px){.bq-v{position:sticky;top:90px}}
-.bq-v svg{width:min(100%,420px);height:auto;overflow:visible}
-.bq-v .fl2{transform-box:fill-box;transform-origin:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1) both}
-@keyframes pop{from{transform:scale(0) rotate(-40deg);opacity:0}}
-.bq-v .sw{animation:sway 6s ease-in-out infinite;transform-origin:160px 300px}
-@keyframes sway{50%{transform:rotate(1.6deg)}}
+.bq-st{position:relative;width:min(100%,440px);aspect-ratio:4/5;margin-inline:auto}
+.bq-st img{position:absolute;height:auto;pointer-events:none;-webkit-user-select:none;user-select:none}
+.bq-st .bk{transform-origin:50% 100%;filter:drop-shadow(0 6px 10px rgba(0,0,0,.12))}
+.bq-st .hd{filter:drop-shadow(0 8px 10px rgba(40,20,20,.28))}
+.bq-st .nw{animation:pop2 .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes pop2{from{scale:0;opacity:0}}
+.pp{position:absolute;left:34%;width:32%;bottom:0;display:block}
+.pp img{position:relative!important;width:100%;display:block}
+.pp i{position:absolute;inset:0;-webkit-mask:url(img/ramo/papel.webp) center/100% 100% no-repeat;mask:url(img/ramo/papel.webp) center/100% 100% no-repeat;mix-blend-mode:multiply}
+.pb{z-index:5}
+.pf{z-index:80;clip-path:inset(38% 0 0 0)}
+.bq-empty{position:absolute;left:0;right:0;top:30%;text-align:center;color:var(--mute);font-weight:700}
+.fr .sw2 img{width:38px;height:38px;object-fit:contain}
 .bq-card{position:absolute;right:6%;bottom:8%;width:min(46%,190px);background:#fffdf8;border:1px solid var(--line);border-radius:6px;box-shadow:0 14px 30px -14px rgba(0,0,0,.35);padding:.7rem .8rem;transform:rotate(-4deg);font-family:"Segoe Script","Bradley Hand","Snell Roundhand",cursive;font-size:.95rem;line-height:1.3;color:#4a3a3a;min-height:58px;word-break:break-word}
 .bq-card:empty{display:none}
 .bq-c{display:grid;gap:1.2rem}
@@ -31,7 +39,6 @@
 .flw{display:grid;gap:.5rem}
 .fr{display:grid;grid-template-columns:44px 1fr auto;gap:.8rem;align-items:center;padding:.55rem .7rem;border:1px solid var(--line);border-radius:16px;background:var(--card)}
 .fr .sw2{width:44px;height:44px;border-radius:12px;background:var(--chip);display:grid;place-items:center}
-.fr .sw2 svg{width:34px;height:34px}
 .fr b{display:block;line-height:1.15}
 .fr small{color:var(--mute);font-size:.8rem}
 .wraps{display:flex;flex-wrap:wrap;gap:.5rem}
@@ -59,4 +66,47 @@
 .qz-r .why{color:var(--mute)}
 .qz-r .pr2{font-family:var(--display);font-size:1.8rem;font-weight:var(--dw)}
 .qz-a{display:flex;flex-wrap:wrap;gap:.6rem}
-@media(prefers-reduced-motion:reduce){.bq-v .fl2,.bq-v .sw{animation:none}.xb-im img{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.bq-st .nw{animation:none}.xb-im img{transform:none!important}}
+/* Optimización móvil (oct 2026): igual que la panadería */
+html,body{overflow-x:clip}
+section[id],.sec{scroll-margin-top:84px}
+.ci .ti{overflow:hidden}.ci .ti img,.ci .ti video{width:100%;height:100%;object-fit:cover}
+@media(max-width:600px){
+ .hdr .wrap{height:62px}
+ .brand{font-size:1.02rem;gap:.55rem;white-space:nowrap}
+ .brand .lg{width:36px;height:36px}
+ .brand small{display:none}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+ .pc{padding:.6rem;border-radius:16px}
+ .pc .im{aspect-ratio:1/1;border-radius:12px}
+ .pc .tg{top:.95rem;left:.95rem;font-size:.6rem;padding:.18rem .5rem}
+ .pc h3{font-size:.98rem;margin-top:.6rem}
+ .pc p{font-size:.8rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ .pc .bt{margin-top:.6rem;gap:.45rem;flex-direction:column;align-items:stretch}
+ .pc .bt .pr{font-size:.95rem}
+ .pc .bt .add{justify-content:center;min-height:40px;padding:.4rem .6rem;font-size:.85rem}
+ .pc .bt .cq{width:100%}
+ .xp-pin{min-height:auto}
+ /* pedido: todo el panel desplaza a la vez, así se ven los productos */
+ .dr{overflow-y:auto;overscroll-behavior:contain}
+ .dr-h{position:sticky;top:0;z-index:2;background:var(--bg)}
+ .dr-b{flex:none;overflow:visible}
+ .ci{grid-template-columns:48px 1fr;gap:.4rem .7rem}
+ .ci .ti{width:48px;height:48px;grid-row:span 2}
+ .ci .qt{grid-column:2;justify-self:start}
+}
+html:has(.dr.on) .toast{display:none}
+/* Añadir y quitar desde la tarjeta (− cantidad +) */
+.add[hidden],.cq[hidden]{display:none!important}
+.cq{display:inline-flex;align-items:center;justify-content:space-between;gap:.2rem;min-height:42px;padding:.2rem;border-radius:999px;background:var(--brand);color:var(--on-brand);font-weight:800;font-size:.88rem;animation:cqin .25s cubic-bezier(.3,1.5,.5,1)}
+.cq button{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:inherit;font-size:1.2rem;font-weight:800;line-height:1;display:grid;place-items:center}
+.cq button:active{transform:scale(.9)}
+.cq-v{min-width:4.2ch;text-align:center;white-space:nowrap}
+@keyframes cqin{from{transform:scale(.85);opacity:.4}}
+.mini img{width:48px;height:48px;object-fit:cover;border-radius:10px;display:block}
+/* Móvil: la vista previa del ramo se queda arriba mientras eliges flores */
+@media(max-width:959px){
+ .bq-v{position:sticky;top:66px;z-index:6;padding:.3rem;box-shadow:0 16px 30px -22px rgba(0,0,0,.35)}
+ .bq-st{width:min(100%,30svh)}
+ .bq-card{font-size:.75rem;padding:.45rem .55rem;min-height:0;width:min(40%,150px)}
+}
