@@ -1,0 +1,31 @@
+# Descarga las piezas del creador de ramos (img/ramo/fuentes.txt), les quita el fondo y las guarda en WebP transparente.
+name: Piezas del ramo
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["img/ramo/fuentes.txt", "tools/recorte.py", ".github/workflows/ramo.yml"]
+permissions:
+  contents: write
+jobs:
+  ramo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -q "rembg[cpu]==2.0.59" pillow
+      - name: Descargar y recortar
+        run: |
+          mkdir -p /tmp/raw
+          grep -v '^#' img/ramo/fuentes.txt | while read -r n u; do [ -z "$n" ] && continue; curl -sSfL -o "/tmp/raw/$n.png" "$u"; done
+          python tools/recorte.py /tmp/raw img/ramo
+          ls -la img/ramo
+      - name: Guardar en el repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git add img/ramo
+          git diff --cached --quiet || git commit -m "chore(img): piezas del ramo sin fondo"
+          git pull --rebase -q
+          git push
