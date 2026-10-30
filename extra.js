@@ -30,8 +30,12 @@
   var WRAP_PRICE = 4;
   var src = function (id) { return "img/ramo/" + id + ".webp"; };
   // Posiciones fijas: espiral de ángulo áureo dentro de la cúpula (en % del escenario)
-  var DOME = [];
-  for (var i = 0; i < 60; i++) { var a = i * 2.39996, rr = Math.sqrt((i + .5) / 60); DOME.push([50 + Math.cos(a) * rr * 27, 47 + Math.sin(a) * rr * 12 - (1 - rr) * 5]); }
+  // Cúpula que se abre a lo ancho según cuántas flores haya (espiral de ángulo áureo, en % del escenario)
+  function dome(n) {
+    var out = [], rx = Math.min(38, 15 + n * 2.1), ry = Math.min(19, 8 + n * 0.75);
+    for (var i = 0; i < n; i++) { var a = i * 2.39996, rr = Math.sqrt((i + .5) / n); out.push([50 + Math.cos(a) * rr * rx, 46 + Math.sin(a) * rr * ry - (1 - rr) * 6]); }
+    return out;
+  }
   // Abanico para lo que va detrás (ángulo en grados)
   var fan = function (k, n, spread) { return n < 2 ? 0 : -spread / 2 + k * spread / (n - 1); };
 
@@ -54,8 +58,8 @@
       ["eucalipto", "lavanda", "tulipan"].forEach(function (id) { for (var k = 0; k < q[id]; k++) backs.push(id); });
       backs.forEach(function (id, k) {
         var f = FL.filter(function (x) { return x.id === id; })[0], n = q[id], idx = backs.slice(0, k).filter(function (x) { return x === id; }).length;
-        var ang = fan(idx, n, id === "eucalipto" ? 110 : id === "lavanda" ? 64 : 50) + (idx % 2 ? 4 : -4);
-        var bot = id === "eucalipto" ? 40 : id === "lavanda" ? 43 : 42;
+        var ang = fan(idx, n, id === "eucalipto" ? 140 : id === "lavanda" ? 96 : 80) + (idx % 2 ? 4 : -4);
+        var bot = id === "eucalipto" ? 40 : id === "lavanda" ? 45 : 50;
         html += '<img class="fl2 bk' + (id === lastAdd && idx === n - 1 ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + f.w + "%;left:" + (50 - f.w / 2) + "%;bottom:" + bot + "%;transform:rotate(" + ang.toFixed(1) + 'deg);z-index:' + (id === "eucalipto" ? 1 : 2) + '">';
       });
       // 2) papel por detrás
@@ -65,7 +69,7 @@
       FL.forEach(function (f) { if (f.head) for (var k = 0; k < q[f.id]; k++) (buckets[f.id] = buckets[f.id] || []).push(f.id); });
       var keys = Object.keys(buckets), more = true;
       while (more) { more = false; keys.forEach(function (k) { if (buckets[k].length) { heads.push(buckets[k].shift()); more = true; } }); }
-      var sc = 1.5 - Math.min(.55, heads.length / 40);
+      var sc = 1.32 - Math.min(.42, heads.length / 50), DOME = dome(heads.length);
       heads.forEach(function (id, k) {
         var f = FL.filter(function (x) { return x.id === id; })[0], p = DOME[k % DOME.length], ww = f.w * sc;
         html += '<img class="fl2 hd' + (id === lastAdd && k === heads.lastIndexOf(id) ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + ww.toFixed(1) + "%;left:" + (p[0] - ww / 2).toFixed(1) + "%;top:" + (p[1] - ww * .55).toFixed(1) + "%;z-index:" + (10 + Math.round(p[1])) + ";transform:rotate(" + ((k * 47) % 30 - 15) + 'deg)">';

@@ -25,7 +25,7 @@
 .bq-st .hd{filter:drop-shadow(0 8px 10px rgba(40,20,20,.28))}
 .bq-st .nw{animation:pop2 .5s cubic-bezier(.3,1.6,.5,1) both}
 @keyframes pop2{from{scale:0;opacity:0}}
-.pp{position:absolute;left:34%;width:32%;bottom:0;display:block}
+.pp{position:absolute;left:32%;width:36%;bottom:0;display:block}
 .pp img{position:relative!important;width:100%;display:block}
 .pp i{position:absolute;inset:0;-webkit-mask:url(img/ramo/papel.webp) center/100% 100% no-repeat;mask:url(img/ramo/papel.webp) center/100% 100% no-repeat;mix-blend-mode:multiply}
 .pb{z-index:5}
