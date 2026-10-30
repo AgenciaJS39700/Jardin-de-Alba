@@ -119,3 +119,18 @@ html:has(.dr.on) .toast{display:none}
 .hero-a .chip-f{z-index:3}
 .hero-a{overflow:visible}
 @media(max-width:600px){.hero-a .ph-it{width:26%!important}}
+/* Bloque «Flores para cada ocasión» con fotos reales */
+.bc.ph{color:#fff;border:0;justify-content:flex-end;min-height:260px;overflow:hidden}
+.bc.ph .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.bc.ph:hover .bg{transform:scale(1.06)}
+.bc.ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,26,0) 25%,rgba(20,40,26,.85));z-index:0}
+.bc.ph>*:not(.bg){position:relative;z-index:1}
+.bc.ph .bc-go{position:static}
+.bc.ph h3{color:#fff}
+.bc.ph p{color:rgba(255,255,255,.9)}
+.bc.ph .ic{background:rgba(255,255,255,.22);backdrop-filter:blur(6px);border-radius:14px;padding:.4rem;width:56px;height:56px}
+.bc.ph.hi{background:none}
+/* Envoltorio en SVG */
+.bq-st .wr{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bq-st .wr-b{z-index:5}
+.bq-st .wr-f{z-index:80;filter:drop-shadow(0 10px 14px rgba(0,0,0,.18))}

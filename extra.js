@@ -20,12 +20,13 @@
     { id: "lavanda", n: "Lavanda", p: 1, max: 15, w: 24, back: true },
     { id: "eucalipto", n: "Eucalipto (verde)", p: 1.2, max: 12, w: 30, back: true }
   ];
+  // Papel: color principal (a), sombra (b), texto de la etiqueta (t) y lazo (l)
   var WR = [
-    { id: "kraft", n: "Kraft", c: "#c69a6a" },
-    { id: "rosa", n: "Rosa empolvado", c: "#efb6c6" },
-    { id: "crema", n: "Crema", c: "" },
-    { id: "salvia", n: "Verde salvia", c: "#9db79c" },
-    { id: "negro", n: "Negro mate", c: "#3b3a3f" }
+    { id: "kraft", n: "Kraft", c: "#c9a072", a: "#d2ab7e", b: "#a77f53", t: "#3d5a42", l: "#f4ece0" },
+    { id: "rosa", n: "Rosa empolvado", c: "#efb6c6", a: "#f2c2cf", b: "#d593a6", t: "#7a2f4a", l: "#ffffff" },
+    { id: "crema", n: "Crema", c: "#f3ead8", a: "#f6efe1", b: "#d9ccb0", t: "#3d5a42", l: "#4a7b57" },
+    { id: "salvia", n: "Verde salvia", c: "#9db79c", a: "#a9c2a8", b: "#7c9a7b", t: "#ffffff", l: "#f4ece0" },
+    { id: "negro", n: "Negro mate", c: "#2f2e33", a: "#38373d", b: "#1d1c20", t: "#e7c98a", l: "#d9b26a" }
   ];
   var WRAP_PRICE = 4;
   var src = function (id) { return "img/ramo/" + id + ".webp"; };
@@ -48,8 +49,31 @@
       }).join("") + '</div></div><div><h4>2 · Papel y lazo</h4><div class="wraps" role="group" aria-label="Papel">' + WR.map(function (w) { return '<button type="button" class="wp" data-w="' + w.id + '" aria-pressed="false"><i style="background:' + (w.c || "#f4eee2") + '"></i>' + esc(w.n) + "</button>"; }).join("") + '</div></div><div><h4>3 · Dedicatoria (opcional)</h4><textarea id="bqmsg" maxlength="140" placeholder="Feliz cumpleaños, mamá. Te quiero mucho."></textarea></div>' +
       '<div class="bq-sum"><span><small id="bqn"></small><b id="bqt"></b></span><a class="btn btn-wa" id="bqgo" target="_blank" rel="noopener" href="#">' + (S.icons && S.icons.wa || "") + "Pedir este ramo</a></div></div>";
 
-    var paper = function (cls, w) {
-      return '<span class="pp ' + cls + '"><img src="' + src("papel") + '" alt="">' + (w.c ? '<i style="background:' + w.c + '"></i>' : "") + "</span>";
+    /* Envoltorio diseñado en SVG (escenario 400×500): hoja trasera en abanico y hoja delantera
+       con el borde curvo, pliegues, etiqueta de la floristería y lazo. */
+    var grain = '<filter id="kr" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .09 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>';
+    var wrapBack = function (w) {
+      return '<svg class="wr wr-b" viewBox="0 0 400 500" aria-hidden="true"><defs>' + grain + '<linearGradient id="gb" x1="0" x2="1"><stop offset="0" stop-color="' + w.b + '"/><stop offset=".5" stop-color="' + w.a + '"/><stop offset="1" stop-color="' + w.b + '"/></linearGradient></defs>' +
+        '<path d="M36 214 Q70 196 104 214 Q138 192 172 210 Q200 190 228 210 Q262 192 296 214 Q330 196 364 214 L236 438 L164 438 Z" fill="url(#gb)"/>' +
+        '<path d="M36 214 Q70 196 104 214 Q138 192 172 210 Q200 190 228 210 Q262 192 296 214 Q330 196 364 214 L236 438 L164 438 Z" filter="url(#kr)"/>' +
+        '<path d="M104 214 L182 430 M296 214 L218 430" stroke="' + w.b + '" stroke-width="2" opacity=".55"/></svg>';
+    };
+    var wrapFront = function (w) {
+      return '<svg class="wr wr-f" viewBox="0 0 400 500" aria-hidden="true"><defs><linearGradient id="gf" x1="0" x2="1"><stop offset="0" stop-color="' + w.b + '"/><stop offset=".28" stop-color="' + w.a + '"/><stop offset=".55" stop-color="' + w.c + '"/><stop offset="1" stop-color="' + w.b + '"/></linearGradient>' +
+        '<linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".35" stop-color="#000" stop-opacity="0"/></linearGradient></defs>' +
+        // hoja delantera: el borde superior baja en el centro para que las flores queden "dentro"
+        '<path d="M92 292 Q150 318 200 340 Q250 318 308 292 L232 440 L168 440 Z" fill="url(#gf)"/>' +
+        '<path d="M92 292 Q150 318 200 340 Q250 318 308 292 L232 440 L168 440 Z" filter="url(#kr)"/>' +
+        '<path d="M92 292 Q150 318 200 340 Q250 318 308 292 L300 306 Q250 330 200 352 Q150 330 100 306 Z" fill="url(#gs)"/>' +
+        '<path d="M200 340 L200 440" stroke="' + w.b + '" stroke-width="1.6" opacity=".5"/><path d="M128 312 L178 438" stroke="#fff" stroke-width="3" opacity=".12"/>' +
+        // etiqueta de la tienda
+        '<g transform="translate(200 392)"><rect x="-46" y="-17" width="92" height="34" rx="17" fill="' + (w.id === "negro" ? "#1d1c20" : "#fffaf2") + '" stroke="' + w.t + '" stroke-opacity=".35"/>' +
+        '<text y="-1" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="12.5" font-weight="700" fill="' + (w.id === "negro" ? w.t : "#3d5a42") + '">Jardín de Alba</text>' +
+        '<text y="11" text-anchor="middle" font-family="system-ui,sans-serif" font-size="6.6" letter-spacing="1.6" fill="' + (w.id === "negro" ? w.t : "#7a8f7f") + '">FLORES FRESCAS</text></g>' +
+        // cuello y lazo
+        '<path d="M168 440 L232 440 L226 492 L174 492 Z" fill="' + w.b + '"/><rect x="164" y="436" width="72" height="12" rx="6" fill="' + w.l + '"/>' +
+        '<path d="M200 442 C178 420 152 428 160 446 C166 458 186 450 200 442 Z M200 442 C222 420 248 428 240 446 C234 458 214 450 200 442 Z" fill="' + w.l + '" stroke="#000" stroke-opacity=".12"/>' +
+        '<path d="M196 446 L182 482 L192 478 L198 450 Z M204 446 L218 482 L208 478 L202 450 Z" fill="' + w.l + '" stroke="#000" stroke-opacity=".1"/><circle cx="200" cy="443" r="6" fill="' + w.l + '" stroke="#000" stroke-opacity=".15"/></svg>';
     };
     var draw = function () {
       var w = WR.filter(function (x) { return x.id === wrap; })[0], html = "";
@@ -63,7 +87,7 @@
         html += '<img class="fl2 bk' + (id === lastAdd && idx === n - 1 ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + f.w + "%;left:" + (50 - f.w / 2) + "%;bottom:" + bot + "%;transform:rotate(" + ang.toFixed(1) + 'deg);z-index:' + (id === "eucalipto" ? 1 : 2) + '">';
       });
       // 2) papel por detrás
-      html += paper("pb", w);
+      html += wrapBack(w);
       // 3) cabezas en la cúpula, mezcladas para que no queden en bloques
       var heads = [], buckets = {};
       FL.forEach(function (f) { if (f.head) for (var k = 0; k < q[f.id]; k++) (buckets[f.id] = buckets[f.id] || []).push(f.id); });
@@ -75,7 +99,7 @@
         html += '<img class="fl2 hd' + (id === lastAdd && k === heads.lastIndexOf(id) ? " nw" : "") + '" src="' + src(id) + '" alt="" style="width:' + ww.toFixed(1) + "%;left:" + (p[0] - ww / 2).toFixed(1) + "%;top:" + (p[1] - ww * .55).toFixed(1) + "%;z-index:" + (10 + Math.round(p[1])) + ";transform:rotate(" + ((k * 47) % 30 - 15) + 'deg)">';
       });
       // 4) papel por delante (solo la parte de abajo) para que las flores queden dentro
-      html += paper("pf", w);
+      html += wrapFront(w);
       if (!heads.length && !backs.length) html += '<span class="bq-empty">Añade flores ✿</span>';
       $("#bqs").innerHTML = html;
 
